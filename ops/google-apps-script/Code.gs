@@ -103,3 +103,30 @@ function doPost(e) {
 function testSpreadsheetAccess() {
   return {sheet: sheet_().getName(),adminEmail: ADMIN_EMAIL};
 }
+
+/**
+ * Run manually to verify one complete Lead -> Sheet -> admin email -> client email flow.
+ * Uses the company's own email as the test client. Not exposed as a web endpoint.
+ */
+function testLeadSubmission() {
+  const stamp = Utilities.formatDate(new Date(), 'Africa/Cairo', 'yyyy-MM-dd HH:mm:ss');
+  const marker = 'DRAGON TEST ' + stamp;
+  const response = doPost({parameter: {
+    name: marker,
+    brand: 'DRAGON STUDIO — INTERNAL TEST',
+    email: ADMIN_EMAIL,
+    phone: '0000000000',
+    package: 'Editing Essentials',
+    starting_price: '2800',
+    platform: 'Instagram',
+    videos: '4',
+    target_date: '',
+    reference: '',
+    extras: 'Internal verification only',
+    brief: 'Internal test submitted to verify Google Sheets and both notification emails. ' + stamp,
+    website: ''
+  }});
+  console.log('Test lead: ' + marker);
+  console.log('Response: ' + response.getContent());
+  console.log('Inspect Leads sheet for the row, and Gmail for 2 messages.');
+}
