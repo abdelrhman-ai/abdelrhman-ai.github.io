@@ -9,9 +9,9 @@
  * 5) Paste the /exec URL into DRAGON_CONFIG.LEADS_ENDPOINT and
  *    enable the website's secure request submission after testing.
  *
- * This script is NOT yet deployed, and the public site does not POST to it.
+ * After updating Apps Script, create a NEW DEPLOYMENT VERSION, and test it before enabling site POST.
  */
-const SHEET_ID = 'REPLACE_WITH_COMPANY_GOOGLE_SHEET_ID';
+const SHEET_ID = '1T-ZM-EnjpU6XYvltwtxj_btUaUMN0r1JaOcOvwvzJRg';
 const SHEET_TAB = 'Leads';
 const ADMIN_EMAIL = 'dragon.media.cerator@gmail.com';
 const FIELDS = [
@@ -35,6 +35,16 @@ function sheet_() {
 
 function doPost(e) {
   const p = (e && e.parameter) || {};
+  const today = Utilities.formatDate(new Date(), 'Africa/Cairo', 'yyyyMMdd');
+  const props = PropertiesService.getScriptProperties();
+  const limitKey = 'daily_leads_' + today;
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    const used = Number(props.getProperty(limitKey) || 0);
+    if (used >= 35) return HtmlService.createHtmlOutput('Submissions temporarily unavailable. Contact us via WhatsApp.');
+    // This quota is per script deployment, not IP. Rate limiting is best-effort.
+  } finally { lock.releaseLock(); }
   // Honeypot field must remain empty (a basic spam filter, not bot protection).
   if (p.website) return HtmlService.createHtmlOutput('Request received.');
   const data = {
@@ -54,11 +64,14 @@ function doPost(e) {
   const fingerprint = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,
     [data.email,data.brief,data.package].join('|')).map(b => ('0'+(b&255).toString(16)).slice(-2)).join('');
   if (cache.get(fingerprint)) return HtmlService.createHtmlOutput('We have already received this request.');
-  const lock = LockService.getScriptLock(); lock.waitLock(20000);
+  const writeLock = LockService.getScriptLock(); writeLock.waitLock(20000);
   try {
+    const already = Number(props.getProperty(limitKey) || 0);
+    if (already >= 35) return HtmlService.createHtmlOutput('Submissions temporarily unavailable. Contact us via WhatsApp.');
     sheet_().appendRow(FIELDS.map(f => data[f]));
+    props.setProperty(limitKey, String(already + 1));
     cache.put(fingerprint,'1',180);
-  } finally { lock.releaseLock(); }
+  } finally { writeLock.releaseLock(); }
   const summary = [
     'Name: '+data.name,'Business: '+data.brand,'Email: '+data.email,
     'Phone: '+data.phone,'Package: '+data.package,'Starting price: '+data.starting_price,
