@@ -37,7 +37,7 @@ const note=document.createElement('p');note.className='intake-actions-note';note
 email.addEventListener('click',()=>{
 if(!valid())return;
 const subject=encodeURIComponent('DRAGON STUDIO — Project inquiry');
-window.location.href='mailto:'+encodeURIComponent(config.CONTACT_EMAIL||'dragon.media.cerator@gmail.com')+'?subject='+subject+'&body='+encodeURIComponent(message());
+window.location.href='mailto:'+(config.CONTACT_EMAIL||'dragon.media.cerator@gmail.com')+'?subject='+subject+'&body='+encodeURIComponent(message());
 });
 quote.addEventListener('submit',event=>{
 event.preventDefault();event.stopImmediatePropagation();
@@ -78,5 +78,10 @@ return ['DRAGON STUDIO | PROJECT INQUIRY','',
 }
 function translate(){for(const n of document.querySelectorAll('[data-extras]')){const key=n.dataset.extras;n.textContent=TXT[language()][key]||''}}
 setupPortfolio();setupIntake();translate();
+const quantity=q('#client-quantity'), pkgSel=q('#package');
+function syncPackageQuantity(){const map={essentials:'4',production:'4',partnership:'8'};if(map[pkgSel.value])quantity.value=map[pkgSel.value]}
+pkgSel?.addEventListener('change',syncPackageQuantity);
+document.querySelectorAll('.package-pick').forEach(b=>b.addEventListener('click',()=>setTimeout(syncPackageQuantity,0)));
+syncPackageQuantity();
 q('#language-toggle')?.addEventListener('click',()=>setTimeout(translate,0));
 })();
