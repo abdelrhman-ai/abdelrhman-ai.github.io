@@ -1,0 +1,23 @@
+/* DRAGON STUDIO — portfolio and intake enhancements, complementary to the existing Canva-derived design */
+.portfolio-video-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:22px}
+.portfolio-video-card{display:flex;gap:18px;align-items:center;border:1px solid var(--line);background:#fffaf5;border-radius:16px;padding:20px;text-decoration:none;color:var(--ink);transition:transform .2s,border-color .2s}
+.portfolio-video-card:hover{transform:translateY(-3px);border-color:var(--red-dark)}
+.pv-thumb{width:90px;height:78px;flex:none;background:linear-gradient(145deg,#282a4d,#b42222);border-radius:12px;display:grid;place-items:center;color:#fff;font-size:32px}
+.pv-body{display:flex;flex-direction:column;gap:7px;min-width:0}
+.pv-body strong{font-size:17px;line-height:1.4}
+.pv-body span{font-size:12px;color:var(--muted)}
+.pv-label{font-weight:700;color:var(--red-dark)!important;letter-spacing:.03em}
+.intake-heading{font-size:14px;font-weight:900;color:var(--red-dark);margin:14px 0 10px}
+#intake-extra-fields .intake-input-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+#intake-extra-fields .intake-field{min-width:0;margin-bottom:12px}
+#intake-extra-fields label{display:block;font-weight:700;font-size:13px;margin:0 0 8px}
+#intake-extra-fields input,#intake-extra-fields select,#intake-extra-fields textarea{width:100%;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);font-family:inherit;font-size:14px;padding:13px;min-height:46px}
+#intake-extra-fields textarea{min-height:96px;resize:vertical}
+#intake-extra-fields input:focus-visible,#intake-extra-fields select:focus-visible,#intake-extra-fields textarea:focus-visible{outline:2px solid var(--red-dark);outline-offset:2px}
+#intake-extra-fields .intake-field-note{font-size:11px;line-height:1.6;color:var(--muted);display:block;margin-top:5px}
+.intake-actions-note{font-size:12px;line-height:1.8;color:var(--muted);margin:7px 0 14px}
+#email-quote{margin-top:10px}
+#intake-extra-fields .consent-line{display:flex;align-items:start;gap:9px;font-size:12px;line-height:1.6;margin:10px 0 18px;color:var(--muted)}
+#intake-extra-fields .consent-line input{width:18px;min-height:18px;margin-top:3px;flex:none}
+.pv-advisory{font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.8}
+@media(max-width:700px){.portfolio-video-grid{grid-template-columns:1fr}#intake-extra-fields .intake-input-grid{grid-template-columns:1fr}.portfolio-video-card{padding:15px}.pv-thumb{width:75px;height:75px}}
